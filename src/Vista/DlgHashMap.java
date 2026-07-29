@@ -17,7 +17,7 @@ private DefaultTableModel modelo;
     /**
      * Creates new form DlgHashMap
      */
-    public DlgHashMap(java.awt.Frame parent, boolean modal) {
+   public DlgHashMap(java.awt.Frame parent, boolean modal) {
     super(parent, modal);
     initComponents();
 
@@ -32,24 +32,10 @@ private DefaultTableModel modelo;
 
     tblHashMap.setModel(modelo);
     setLocationRelativeTo(parent);
+
+    mostrar();
 }
-private boolean camposValidos() {
-    if (txtClave.getText().trim().isEmpty()
-            || txtValor.getText().trim().isEmpty()) {
-
-        JOptionPane.showMessageDialog(
-            this,
-            "Debe escribir una clave y un valor.",
-            "Campos incompletos",
-            JOptionPane.WARNING_MESSAGE
-        );
-
-        return false;
-    }
-
-    return true;
-}
-private void mostrarDatos() {
+private void mostrar() {
     modelo.setRowCount(0);
 
     for (Map.Entry<String, String> elemento : datos.entrySet()) {
@@ -58,6 +44,29 @@ private void mostrarDatos() {
             elemento.getValue()
         });
     }
+}
+private void seleccionarClave(String clave) {
+    for (int fila = 0; fila < tblHashMap.getRowCount(); fila++) {
+        String claveTabla = tblHashMap
+                .getValueAt(fila, 0)
+                .toString();
+
+        if (clave.equals(claveTabla)) {
+            tblHashMap.setRowSelectionInterval(fila, fila);
+
+            tblHashMap.scrollRectToVisible(
+                tblHashMap.getCellRect(fila, 0, true)
+            );
+
+            break;
+        }
+    }
+}
+private void limpiarCampos() {
+    txtClave.setText("");
+    txtValor.setText("");
+    tblHashMap.clearSelection();
+    txtClave.requestFocus();
 }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -78,16 +87,15 @@ private void mostrarDatos() {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblHashMap = new javax.swing.JTable();
         btnInsertar = new javax.swing.JButton();
-        btnMostrar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        getContentPane().setLayout(new java.awt.BorderLayout(10, 10));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
         jLabel1.setText("HashMap de claves y valores");
-        getContentPane().add(jLabel1, java.awt.BorderLayout.NORTH);
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 10, -1, -1));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos del elemento"));
 
@@ -124,7 +132,7 @@ private void mostrarDatos() {
                 .addContainerGap(50, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 620, -1));
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -152,13 +160,6 @@ private void mostrarDatos() {
             }
         });
 
-        btnMostrar.setText("Mostrar");
-        btnMostrar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMostrarActionPerformed(evt);
-            }
-        });
-
         btnEliminar.setText("Eliminar");
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -181,17 +182,13 @@ private void mostrarDatos() {
                 .addContainerGap(61, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 527, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(28, 28, 28))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(btnInsertar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnMostrar, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(49, 49, 49)
+                        .addGap(114, 114, 114)
                         .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(42, 42, 42)
-                        .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(47, 47, 47))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 527, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -201,59 +198,56 @@ private void mostrarDatos() {
                 .addGap(33, 33, 33)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnInsertar)
-                    .addComponent(btnMostrar)
                     .addComponent(btnEliminar)
                     .addComponent(btnBuscar))
                 .addContainerGap(75, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel2, java.awt.BorderLayout.SOUTH);
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 215, 620, 290));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnInsertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarActionPerformed
-      if (!camposValidos()) {
+     String clave = txtClave.getText().trim();
+    String valor = txtValor.getText().trim();
+
+    if (clave.isEmpty() || valor.isEmpty()) {
+        JOptionPane.showMessageDialog(
+            this,
+            "Debe escribir una clave y un valor.",
+            "Campos incompletos",
+            JOptionPane.WARNING_MESSAGE
+        );
+
+        txtClave.requestFocus();
         return;
     }
-
-    String clave = txtClave.getText().trim();
-    String valor = txtValor.getText().trim();
 
     boolean claveExistente = datos.containsKey(clave);
 
     datos.put(clave, valor);
-    mostrarDatos();
-    
+
+    // Actualiza automáticamente la tabla
+    mostrar();
 
     if (claveExistente) {
         JOptionPane.showMessageDialog(
             this,
-            "La clave ya existía. Su valor fue actualizado."
+            "La clave ya existía. El valor fue actualizado."
         );
     } else {
         JOptionPane.showMessageDialog(
             this,
             "Elemento insertado correctamente."
         );
-    } 
+    }
+
+    limpiarCampos();
     }//GEN-LAST:event_btnInsertarActionPerformed
 
-    private void btnMostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarActionPerformed
-        
-    mostrarDatos();
-
-    if (datos.isEmpty()) {
-        JOptionPane.showMessageDialog(
-            this,
-            "El HashMap está vacío."
-        );
-    
-}
-    }//GEN-LAST:event_btnMostrarActionPerformed
-
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-       String clave = txtClave.getText().trim();
+      String clave = txtClave.getText().trim();
 
     if (clave.isEmpty()) {
         JOptionPane.showMessageDialog(
@@ -262,12 +256,16 @@ private void mostrarDatos() {
             "Campo vacío",
             JOptionPane.WARNING_MESSAGE
         );
+
+        txtClave.requestFocus();
         return;
     }
 
     if (datos.containsKey(clave)) {
         String valorEncontrado = datos.get(clave);
+
         txtValor.setText(valorEncontrado);
+        seleccionarClave(clave);
 
         JOptionPane.showMessageDialog(
             this,
@@ -275,11 +273,12 @@ private void mostrarDatos() {
         );
     } else {
         txtValor.setText("");
+        tblHashMap.clearSelection();
 
         JOptionPane.showMessageDialog(
             this,
-            "La clave no existe.",
-            "Resultado de búsqueda",
+            "La clave no se encuentra en el HashMap.",
+            "No encontrado",
             JOptionPane.WARNING_MESSAGE
         );
     }
@@ -295,6 +294,8 @@ private void mostrarDatos() {
             "Campo vacío",
             JOptionPane.WARNING_MESSAGE
         );
+
+        txtClave.requestFocus();
         return;
     }
 
@@ -305,6 +306,7 @@ private void mostrarDatos() {
             "No encontrado",
             JOptionPane.WARNING_MESSAGE
         );
+
         return;
     }
 
@@ -316,14 +318,18 @@ private void mostrarDatos() {
     );
 
     if (respuesta == JOptionPane.YES_OPTION) {
-        datos.remove(clave);
-        mostrarDatos();
-        
+        String valorEliminado = datos.remove(clave);
+
+        // Actualiza automáticamente la tabla
+        mostrar();
 
         JOptionPane.showMessageDialog(
             this,
-            "Elemento eliminado correctamente."
+            "Elemento eliminado: "
+                    + clave + " = " + valorEliminado
         );
+
+        limpiarCampos();
     }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
@@ -387,7 +393,6 @@ private void mostrarDatos() {
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnInsertar;
-    private javax.swing.JButton btnMostrar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
