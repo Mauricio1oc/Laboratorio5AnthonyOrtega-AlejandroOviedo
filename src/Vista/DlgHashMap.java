@@ -3,21 +3,62 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 package Vista;
-
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author mauri
  */
 public class DlgHashMap extends javax.swing.JDialog {
-
+private final HashMap<String, String> datos = new HashMap<>();
+private DefaultTableModel modelo;
     /**
      * Creates new form DlgHashMap
      */
     public DlgHashMap(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
-        initComponents();
+    super(parent, modal);
+    initComponents();
+
+    modelo = new DefaultTableModel(
+        new Object[]{"Clave", "Valor"}, 0
+    ) {
+        @Override
+        public boolean isCellEditable(int fila, int columna) {
+            return false;
+        }
+    };
+
+    tblHashMap.setModel(modelo);
+    setLocationRelativeTo(parent);
+}
+private boolean camposValidos() {
+    if (txtClave.getText().trim().isEmpty()
+            || txtValor.getText().trim().isEmpty()) {
+
+        JOptionPane.showMessageDialog(
+            this,
+            "Debe escribir una clave y un valor.",
+            "Campos incompletos",
+            JOptionPane.WARNING_MESSAGE
+        );
+
+        return false;
     }
 
+    return true;
+}
+private void mostrarDatos() {
+    modelo.setRowCount(0);
+
+    for (Map.Entry<String, String> elemento : datos.entrySet()) {
+        modelo.addRow(new Object[]{
+            elemento.getKey(),
+            elemento.getValue()
+        });
+    }
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -35,18 +76,20 @@ public class DlgHashMap extends javax.swing.JDialog {
         txtValor = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblTablaHashMap = new javax.swing.JTable();
+        tblHashMap = new javax.swing.JTable();
         btnInsertar = new javax.swing.JButton();
         btnMostrar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
         jLabel1.setText("HashMap de claves y valores");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 10, -1, -1));
+        jLabel1.setAlignmentX(0.5F);
+        getContentPane().add(jLabel1);
+        getContentPane().add(javax.swing.Box.createVerticalStrut(10));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos del elemento"));
 
@@ -83,11 +126,12 @@ public class DlgHashMap extends javax.swing.JDialog {
                 .addContainerGap(50, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 450, -1));
+        getContentPane().add(jPanel1);
+        getContentPane().add(javax.swing.Box.createVerticalStrut(10));
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        tblTablaHashMap.setModel(new javax.swing.table.DefaultTableModel(
+        tblHashMap.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
                 {null, null},
@@ -97,22 +141,47 @@ public class DlgHashMap extends javax.swing.JDialog {
                 "Clave", "Valor"
             }
         ));
-        jScrollPane1.setViewportView(tblTablaHashMap);
+        tblHashMap.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblHashMapMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblHashMap);
 
         btnInsertar.setText("Insertar");
+        btnInsertar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInsertarActionPerformed(evt);
+            }
+        });
 
         btnMostrar.setText("Mostrar");
+        btnMostrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMostrarActionPerformed(evt);
+            }
+        });
 
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(21, Short.MAX_VALUE)
+                .addContainerGap(61, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 527, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -138,13 +207,142 @@ public class DlgHashMap extends javax.swing.JDialog {
                     .addComponent(btnMostrar)
                     .addComponent(btnEliminar)
                     .addComponent(btnBuscar))
-                .addContainerGap(445, Short.MAX_VALUE))
+                .addContainerGap(75, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 215, 580, 660));
+        getContentPane().add(jPanel2);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnInsertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarActionPerformed
+      if (!camposValidos()) {
+        return;
+    }
+
+    String clave = txtClave.getText().trim();
+    String valor = txtValor.getText().trim();
+
+    boolean claveExistente = datos.containsKey(clave);
+
+    datos.put(clave, valor);
+    mostrarDatos();
+    
+
+    if (claveExistente) {
+        JOptionPane.showMessageDialog(
+            this,
+            "La clave ya existía. Su valor fue actualizado."
+        );
+    } else {
+        JOptionPane.showMessageDialog(
+            this,
+            "Elemento insertado correctamente."
+        );
+    } 
+    }//GEN-LAST:event_btnInsertarActionPerformed
+
+    private void btnMostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarActionPerformed
+        
+    mostrarDatos();
+
+    if (datos.isEmpty()) {
+        JOptionPane.showMessageDialog(
+            this,
+            "El HashMap está vacío."
+        );
+    
+}
+    }//GEN-LAST:event_btnMostrarActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+       String clave = txtClave.getText().trim();
+
+    if (clave.isEmpty()) {
+        JOptionPane.showMessageDialog(
+            this,
+            "Escriba la clave que desea buscar.",
+            "Campo vacío",
+            JOptionPane.WARNING_MESSAGE
+        );
+        return;
+    }
+
+    if (datos.containsKey(clave)) {
+        String valorEncontrado = datos.get(clave);
+        txtValor.setText(valorEncontrado);
+
+        JOptionPane.showMessageDialog(
+            this,
+            "Valor encontrado: " + valorEncontrado
+        );
+    } else {
+        txtValor.setText("");
+
+        JOptionPane.showMessageDialog(
+            this,
+            "La clave no existe.",
+            "Resultado de búsqueda",
+            JOptionPane.WARNING_MESSAGE
+        );
+    }
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+       String clave = txtClave.getText().trim();
+
+    if (clave.isEmpty()) {
+        JOptionPane.showMessageDialog(
+            this,
+            "Escriba la clave que desea eliminar.",
+            "Campo vacío",
+            JOptionPane.WARNING_MESSAGE
+        );
+        return;
+    }
+
+    if (!datos.containsKey(clave)) {
+        JOptionPane.showMessageDialog(
+            this,
+            "La clave no existe.",
+            "No encontrado",
+            JOptionPane.WARNING_MESSAGE
+        );
+        return;
+    }
+
+    int respuesta = JOptionPane.showConfirmDialog(
+        this,
+        "¿Desea eliminar la clave " + clave + "?",
+        "Confirmar eliminación",
+        JOptionPane.YES_NO_OPTION
+    );
+
+    if (respuesta == JOptionPane.YES_OPTION) {
+        datos.remove(clave);
+        mostrarDatos();
+        
+
+        JOptionPane.showMessageDialog(
+            this,
+            "Elemento eliminado correctamente."
+        );
+    }
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void tblHashMapMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHashMapMouseClicked
+        int fila = tblHashMap.getSelectedRow();
+
+    if (fila >= 0) {
+        txtClave.setText(
+            tblHashMap.getValueAt(fila, 0).toString()
+        );
+
+        txtValor.setText(
+            tblHashMap.getValueAt(fila, 1).toString()
+        );
+    }
+    }//GEN-LAST:event_tblHashMapMouseClicked
 
     /**
      * @param args the command line arguments
@@ -199,7 +397,7 @@ public class DlgHashMap extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblClave;
     private javax.swing.JLabel lblValor;
-    private javax.swing.JTable tblTablaHashMap;
+    private javax.swing.JTable tblHashMap;
     private javax.swing.JTextField txtClave;
     private javax.swing.JTextField txtValor;
     // End of variables declaration//GEN-END:variables
