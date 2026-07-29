@@ -83,13 +83,11 @@ private void mostrarDatos() {
         btnBuscar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
+        getContentPane().setLayout(new java.awt.BorderLayout(10, 10));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
         jLabel1.setText("HashMap de claves y valores");
-        jLabel1.setAlignmentX(0.5F);
-        getContentPane().add(jLabel1);
-        getContentPane().add(javax.swing.Box.createVerticalStrut(10));
+        getContentPane().add(jLabel1, java.awt.BorderLayout.NORTH);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos del elemento"));
 
@@ -110,7 +108,7 @@ private void mostrarDatos() {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(txtClave)
                     .addComponent(txtValor, javax.swing.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(191, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -126,8 +124,7 @@ private void mostrarDatos() {
                 .addContainerGap(50, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel1);
-        getContentPane().add(javax.swing.Box.createVerticalStrut(10));
+        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -210,7 +207,7 @@ private void mostrarDatos() {
                 .addContainerGap(75, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel2);
+        getContentPane().add(jPanel2, java.awt.BorderLayout.SOUTH);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
