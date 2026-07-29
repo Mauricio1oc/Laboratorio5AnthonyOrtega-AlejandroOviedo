@@ -111,7 +111,7 @@ public class JFramePrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnHashMapActionPerformed
 
     private void BtnPilasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnPilasActionPerformed
-        DlgPilas ventanaPilas = new DlgPilas(this, true);
+        DlgPilas1 ventanaPilas = new DlgPilas1(this, true);
         ventanaPilas.setLocationRelativeTo(this);
         ventanaPilas.setVisible(true);
     }//GEN-LAST:event_BtnPilasActionPerformed
