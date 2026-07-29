@@ -30,10 +30,12 @@ private DefaultTableModel modelo;
         }
     };
 
-    tblColas.setModel(modelo);
+    tblCola.setModel(modelo);
     setLocationRelativeTo(parent);
+
+    mostrar();
 }
-private void mostrarCola() {
+private void mostrar() {
     modelo.setRowCount(0);
 
     int posicion = 1;
@@ -48,11 +50,11 @@ private void mostrarCola() {
     }
 }
 private void seleccionarFila(int fila) {
-    if (fila >= 0 && fila < tblColas.getRowCount()) {
-        tblColas.setRowSelectionInterval(fila, fila);
+    if (fila >= 0 && fila < tblCola.getRowCount()) {
+        tblCola.setRowSelectionInterval(fila, fila);
 
-        tblColas.scrollRectToVisible(
-            tblColas.getCellRect(fila, 0, true)
+        tblCola.scrollRectToVisible(
+            tblCola.getCellRect(fila, 0, true)
         );
     }
 }
@@ -76,9 +78,8 @@ private void seleccionarFila(int fila) {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblColas = new javax.swing.JTable();
+        tblCola = new javax.swing.JTable();
         btnInsertar = new javax.swing.JButton();
-        btnMostrar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
 
@@ -129,7 +130,7 @@ private void seleccionarFila(int fila) {
         jLabel4.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
         jLabel4.setText("Final:");
 
-        tblColas.setModel(new javax.swing.table.DefaultTableModel(
+        tblCola.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -140,7 +141,7 @@ private void seleccionarFila(int fila) {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tblColas);
+        jScrollPane1.setViewportView(tblCola);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -175,13 +176,6 @@ private void seleccionarFila(int fila) {
             }
         });
 
-        btnMostrar.setText("Mostrar");
-        btnMostrar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMostrarActionPerformed(evt);
-            }
-        });
-
         btnEliminar.setText("Eliminar");
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -210,12 +204,11 @@ private void seleccionarFila(int fila) {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(btnInsertar)
-                                .addGap(90, 90, 90)
-                                .addComponent(btnMostrar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(156, 156, 156)
                                 .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(94, 94, 94)
-                                .addComponent(btnBuscar))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnBuscar)
+                                .addGap(13, 13, 13))
                             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(59, Short.MAX_VALUE))
@@ -232,7 +225,6 @@ private void seleccionarFila(int fila) {
                 .addGap(38, 38, 38)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnInsertar)
-                    .addComponent(btnMostrar)
                     .addComponent(btnEliminar)
                     .addComponent(btnBuscar))
                 .addContainerGap(44, Short.MAX_VALUE))
@@ -258,19 +250,6 @@ private void seleccionarFila(int fila) {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnMostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarActionPerformed
-        mostrarCola();
-
-    if (cola.isEmpty()) {
-        JOptionPane.showMessageDialog(
-            this,
-            "La cola está vacía.",
-            "Información",
-            JOptionPane.INFORMATION_MESSAGE
-        );
-    }
-    }//GEN-LAST:event_btnMostrarActionPerformed
-
     private void btnInsertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarActionPerformed
       String elemento = txtElemento.getText().trim();
 
@@ -287,7 +266,9 @@ private void seleccionarFila(int fila) {
     }
 
     cola.offer(elemento);
-    mostrarCola();
+
+    // Actualiza automáticamente la tabla
+    mostrar();
 
     JOptionPane.showMessageDialog(
         this,
@@ -299,39 +280,46 @@ private void seleccionarFila(int fila) {
     }//GEN-LAST:event_btnInsertarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        if (cola.isEmpty()) {
+     if (cola.isEmpty()) {
         JOptionPane.showMessageDialog(
             this,
             "No se puede eliminar porque la cola está vacía.",
             "Cola vacía",
             JOptionPane.WARNING_MESSAGE
         );
+
         return;
     }
 
-    String primerElemento = cola.peek();
+    String elementoFrente = cola.peek();
 
     int respuesta = JOptionPane.showConfirmDialog(
         this,
         "¿Desea eliminar el elemento del frente: "
-                + primerElemento + "?",
+                + elementoFrente + "?",
         "Confirmar eliminación",
         JOptionPane.YES_NO_OPTION
     );
 
     if (respuesta == JOptionPane.YES_OPTION) {
-        String eliminado = cola.poll();
-        mostrarCola();
+        String elementoEliminado = cola.poll();
+
+        // Actualiza automáticamente la tabla
+        mostrar();
 
         JOptionPane.showMessageDialog(
             this,
-            "Elemento eliminado: " + eliminado
+            "Elemento eliminado: " + elementoEliminado
         );
-    }
+
+        txtElemento.setText("");
+        txtElemento.requestFocus();
+    }   
+    
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-       String buscado = txtElemento.getText().trim();
+      String buscado = txtElemento.getText().trim();
 
     if (buscado.isEmpty()) {
         JOptionPane.showMessageDialog(
@@ -346,26 +334,36 @@ private void seleccionarFila(int fila) {
     }
 
     int posicion = 1;
-    int posicionEncontrada = -1;
+    int filaEncontrada = -1;
 
     for (String elemento : cola) {
         if (elemento.equalsIgnoreCase(buscado)) {
-            posicionEncontrada = posicion;
+            filaEncontrada = posicion - 1;
             break;
         }
 
         posicion++;
     }
 
-    if (posicionEncontrada != -1) {
-        JOptionPane.showMessageDialog(
-            this,
-            "Elemento encontrado en la posición: "
-                    + posicionEncontrada
+    if (filaEncontrada >= 0) {
+        tblCola.setRowSelectionInterval(
+            filaEncontrada,
+            filaEncontrada
         );
 
-        seleccionarFila(posicionEncontrada - 1);
+        tblCola.scrollRectToVisible(
+            tblCola.getCellRect(filaEncontrada, 0, true)
+        );
+
+        JOptionPane.showMessageDialog(
+            this,
+            "Elemento encontrado en la posición "
+                    + (filaEncontrada + 1)
+                    + " desde el frente."
+        );
     } else {
+        tblCola.clearSelection();
+
         JOptionPane.showMessageDialog(
             this,
             "El elemento no se encuentra en la cola.",
@@ -425,7 +423,6 @@ private void seleccionarFila(int fila) {
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnInsertar;
-    private javax.swing.JButton btnMostrar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -434,7 +431,7 @@ private void seleccionarFila(int fila) {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblColas;
+    private javax.swing.JTable tblCola;
     private javax.swing.JTextField txtElemento;
     // End of variables declaration//GEN-END:variables
 }
